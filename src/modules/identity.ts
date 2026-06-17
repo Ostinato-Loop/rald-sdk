@@ -44,7 +44,7 @@ export class RaldIdentity extends RaldClient {
    */
   async resolve(lookup: string): Promise<RaldUser> {
     const clean = lookup.replace(/^@/, "");
-    return this.get<RaldUser>(`/identity/${encodeURIComponent(clean)}`);
+    return this._get<RaldUser>(`/identity/${encodeURIComponent(clean)}`);
   }
 
   /**
@@ -70,7 +70,7 @@ export class RaldIdentity extends RaldClient {
    * Returns per-service status, retry queue state, and audit trail.
    */
   async provisionStatus(raldId: string): Promise<ProvisionStatusResponse> {
-    return this.get<ProvisionStatusResponse>(`/signup/status/${raldId}`);
+    return this._get<ProvisionStatusResponse>(`/signup/status/${raldId}`);
   }
 
   /**
@@ -86,7 +86,7 @@ export class RaldIdentity extends RaldClient {
    * Get identities that match a username search.
    */
   async search(query: string, limit = 20): Promise<RaldUser[]> {
-    const res = await this.get<{ users: RaldUser[] }>(`/search/users`, { q: query, limit });
+    const res = await this._get<{ users: RaldUser[] }>(`/search/users`, { q: query, limit });
     return res.users;
   }
 }
