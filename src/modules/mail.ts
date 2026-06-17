@@ -16,7 +16,7 @@ export class RaldMail extends RaldClient {
    * // mail.address → "boyd@rald.cloud"
    */
   async get(raldId: string): Promise<MailAccount> {
-    return super.get<MailAccount>(`/mail/${encodeURIComponent(raldId)}`);
+    return super._get<MailAccount>(`/mail/${encodeURIComponent(raldId)}`);
   }
 
   /**
