@@ -32,7 +32,7 @@ export class RaldAlia extends RaldClient {
   async resolve(handle: string): Promise<AliasResolutionResult> {
     // Normalize: strip @ and @rald.cloud suffix
     const clean = handle.replace(/^@/, "").replace(/@rald\.cloud$/, "");
-    const alias = await super.get<AliasRecord>(`/alias/${encodeURIComponent(clean)}`);
+    const alias = await this._get<AliasRecord>(`/alias/${encodeURIComponent(clean)}`);
 
     return {
       handle:     alias.handle,
