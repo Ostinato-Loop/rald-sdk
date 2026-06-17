@@ -22,7 +22,7 @@ export class RaldWallet extends RaldClient {
    * // wallet.status → "active"
    */
   async get(raldId: string): Promise<WalletRecord> {
-    return super.get<WalletRecord>(`/wallet/${encodeURIComponent(raldId)}`);
+    return super._get<WalletRecord>(`/wallet/${encodeURIComponent(raldId)}`);
   }
 
   /**
@@ -35,7 +35,7 @@ export class RaldWallet extends RaldClient {
    */
   async fromUsername(usernameOrHandle: string): Promise<WalletRecord & { rald_id: string; username: string }> {
     const clean = usernameOrHandle.replace(/^@/, "");
-    const identity = await super.get<{ rald_id: string; username: string; wallet_id: string | null }>(
+    const identity = await super._get<{ rald_id: string; username: string; wallet_id: string | null }>(
       `/identity/${encodeURIComponent(clean)}`
     );
     if (!identity.wallet_id) {
