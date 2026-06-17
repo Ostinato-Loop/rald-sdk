@@ -87,6 +87,9 @@ export class RALDSDK {
   }
 }
 
+// Allow process.env in Node.js environments (type declaration for TS)
+declare const process: { env: Record<string, string | undefined> } | undefined;
+
 /**
  * Quick helper to create the SDK from environment variables.
  * Reads RALD_API_TOKEN and RALD_API_URL automatically.
