@@ -75,7 +75,7 @@ export class RaldClient {
     return data as T;
   }
 
-  protected get<T>(path: string, params?: Record<string, string | number | undefined>): Promise<T> {
+  protected _get<T>(path: string, params?: Record<string, string | number | undefined>): Promise<T> {
     let fullPath = path;
     if (params) {
       const qs = Object.entries(params)
