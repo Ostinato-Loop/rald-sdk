@@ -7,15 +7,17 @@ on:
 
 jobs:
   typecheck:
-    name: Typecheck
+    name: Typecheck & Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: "20" }
-      - name: Install type dependencies only
-        run: npm install --save-dev typescript@5.4.5 tsup@8.1.0 --no-audit --no-fund
+      - name: Pin npm to stable version (npm 10.9.8 has Exit-handler crash bug)
+        run: npm install -g npm@10.5.2
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit
       - name: Type check
-        run: npx tsc --noEmit
+        run: npm run check
       - name: Build SDK
-        run: npx tsup src/index.ts --format esm,cjs --dts --out-dir dist --no-splitting
+        run: npm run build
