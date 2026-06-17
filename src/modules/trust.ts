@@ -44,13 +44,13 @@ export class RaldTrust extends RaldClient {
    * const trust = await raldTrust.get("rld_8dj39sj29x");
    * if (trust.trust_tier === "none") blockTransfer();
    */
-  async get(raldId: string): Promise<TrustProfile> {
-    return this.get_<TrustProfile>(`/trust/${encodeURIComponent(raldId)}`);
+  async getProfile(raldId: string): Promise<TrustProfile> {
+    return this._get<TrustProfile>(`/trust/${encodeURIComponent(raldId)}`);
   }
 
   /** Get your own trust profile (authenticated user) */
   async me(): Promise<TrustProfile> {
-    return this.get_<TrustProfile>("/trust-engine/me");
+    return this._get<TrustProfile>("/trust-engine/me");
   }
 
   /**
@@ -70,7 +70,7 @@ export class RaldTrust extends RaldClient {
       blockSanctions = true,
     } = options;
 
-    const trust = await this.get(raldId);
+    const trust = await this.getProfile(raldId);
 
     if (blockFraud && trust.fraud_flagged) {
       return { allowed: false, reason: "Account flagged for fraud review", trust };
@@ -98,7 +98,7 @@ export class RaldTrust extends RaldClient {
    * const canTransfer = await trust.hasMinTier("rld_...", "verified");
    */
   async hasMinTier(raldId: string, minTier: TrustTier): Promise<boolean> {
-    const trust = await this.get(raldId);
+    const trust = await this.getProfile(raldId);
     return TIER_ORDER[trust.trust_tier] >= TIER_ORDER[minTier];
   }
 
@@ -109,12 +109,8 @@ export class RaldTrust extends RaldClient {
     rald_id: string; trust_score: number; trust_tier: TrustTier;
     is_merchant: boolean; is_creator: boolean; is_school: boolean;
   }>> {
-    const res = await this.get_<{ leaderboard: any[] }>("/trust-engine/leaderboard", { limit });
+    const res = await this._get<{ leaderboard: any[] }>("/trust-engine/leaderboard", { limit });
     return res.leaderboard;
   }
 
-  // Alias to avoid conflict with inherited method
-  private get_<T>(path: string, params?: Record<string, string | number | undefined>): Promise<T> {
-    return this.get<T>(path, params);
-  }
 }
