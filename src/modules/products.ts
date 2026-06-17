@@ -16,7 +16,7 @@ export class RaldProducts extends RaldClient {
    * // [{ slug: "payrald", name: "PayRald", status: "active" }, ...]
    */
   async list(status: "active" | "beta" | "all" = "active"): Promise<RaldProduct[]> {
-    const res = await super.get<{ products: RaldProduct[] }>(
+    const res = await super._get<{ products: RaldProduct[] }>(
       "/products",
       status === "all" ? undefined : { status }
     );
@@ -30,7 +30,7 @@ export class RaldProducts extends RaldClient {
    * const payrald = await raldProducts.get("payrald");
    */
   async get(slug: string): Promise<RaldProduct> {
-    return super.get<RaldProduct>(`/products/${encodeURIComponent(slug)}`);
+    return super._get<RaldProduct>(`/products/${encodeURIComponent(slug)}`);
   }
 
   /**
@@ -42,7 +42,7 @@ export class RaldProducts extends RaldClient {
    * if (health.ecosystem_health !== "ok") alertOps(health);
    */
   async ecosystemHealth(): Promise<EcosystemHealth> {
-    return super.get<EcosystemHealth>("/ecosystem/health");
+    return super._get<EcosystemHealth>("/ecosystem/health");
   }
 
   /**
@@ -53,7 +53,7 @@ export class RaldProducts extends RaldClient {
    */
   async isHealthy(slug: string): Promise<boolean> {
     try {
-      const res = await super.get<{ health: string }>(`/products/${slug}/health`);
+      const res = await super._get<{ health: string }>(`/products/${slug}/health`);
       return res.health === "ok";
     } catch {
       return false;
